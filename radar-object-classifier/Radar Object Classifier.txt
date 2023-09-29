@@ -1,2 +1,0 @@
-Possible dataset:
-  https://github.com/kaist-avelab/K-Radar
