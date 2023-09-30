@@ -22,7 +22,7 @@ with col1:
     st.image('images/BaseballAL.png')
 
     # display the link to that page.
-    st.write('<a href="/American League"> Check out the statistics of the American League!</a>', unsafe_allow_html=True)
+    st.write('<a href="/AmericanLeague"> Check out the statistics of the American League!</a>', unsafe_allow_html=True)
 
 # inside of the second column
 with col2:
@@ -30,6 +30,6 @@ with col2:
     st.image('images/BaseballNL.png')
 
     # display another link to that page
-    st.write('<a href="/National League">Check out the statistics of the American League!</a>', unsafe_allow_html=True)
+    st.write('<a href="/NationalLeague">Check out the statistics of the American League!</a>', unsafe_allow_html=True)
 
 
