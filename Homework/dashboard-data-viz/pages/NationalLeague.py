@@ -20,7 +20,8 @@ team_list = sorted(Nleague['Team'].unique())
 # create a multi select button
 selected_teams = st.multiselect(
     'Select which teams to compare.',
-    team_list)
+    team_list,
+    default=['ARI'])
 
 team_df = Nleague[Nleague['Team'].isin(selected_teams)].groupby('Team')['RS'].mean().reset_index().copy()
 
