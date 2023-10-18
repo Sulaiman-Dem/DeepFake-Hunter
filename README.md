@@ -12,7 +12,7 @@ The primary objective of our AI model is to distinguish between authentic and fa
 
 ## Implementation:
 
-Our AI model will be constructed as a neural network, utilizing supervised learning initially. We will feed it labeled data – a mix of both genuine and tampered audios – to allow the model to learn the characteristics that differentiate the two. After the initial phase, we plan to transition to reinforcement learning. This approach will enable the model to refine its predictions based on feedback, optimizing its performance over time. Our primary choice of framework for implementing this model is PyTorch due to its flexibility and efficiency in developing deep learning models. However, we will consider TensorFlow as an alternative if we encounter problems that can't be readily addressed in PyTorch.
+Our AI model will be constructed as a neural network, utilizing supervised learning initially. We will feed it labeled data – a mix of both genuine and tampered audios – to allow the model to learn the characteristics that differentiate the two. After the initial phase, we plan to transition to reinforcement learning. This approach will enable the model to refine its predictions based on feedback, optimizing its performance over time. Our primary choice of framework for implementing this model is Tensorflow due to its simplicity with Sequential API. Since this will be our first ever model. 
 
 ## Issues:
 
