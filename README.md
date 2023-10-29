@@ -1,6 +1,10 @@
 # Deep-Fake-Audio-Detection
 
-! Important Note: This was run in google colab pro using A100 GPU.
+---
+
+Important Note: This was run in google colab pro using A100 GPU.
+
+---
 
 Team members:
 
