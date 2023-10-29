@@ -1,5 +1,7 @@
 # Deep-Fake-Audio-Detection
 
+! Important Note: This was run in google colab pro using A100 GPU.
+
 Team members:
 
 1. Sulaiman Dem-Zerigat
@@ -11,7 +13,7 @@ The primary objective of our AI model is to distinguish between authentic and fa
 
 ## Implementation:
 
-Our AI model will be constructed as a neural network, utilizing supervised learning initially. We will feed it labelled data – a mix of both genuine and tampered audio – to allow the model to learn the characteristics that differentiate the two. After the initial phase, we plan to transition to reinforcement learning. This approach will enable the model to refine its predictions based on feedback, optimizing its performance over time. Our primary choice of framework for implementing this model is Tensorflow due to its simplicity with Sequential API. Since this will be our first-ever model. 
+Our AI model will be constructed as a neural network, utilizing supervised learning initially. We will feed it labelled data – a mix of both genuine and tampered audio – to allow the model to learn the characteristics that differentiate the two. After the initial phase, we plan to transition to reinforcement learning. This approach will enable the model to refine its predictions based on feedback, optimizing its performance over time. Our primary choice of framework for implementing this model is Tensorflow due to its simplicity with Sequential API. Since this will be our first-ever model.
 
 ## Issues:
 
