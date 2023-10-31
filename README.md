@@ -1,10 +1,9 @@
 # Deep-Fake-Audio-Detection
 
----
+Team members:
 
-Important Note: This was run in google colab pro using A100 GPU.
-
----
+1. Sulaiman Dem-Zerigat
+2. Sung Yi
 
 **Data Preparation: Sulaiman and Sung**
 
@@ -16,10 +15,11 @@ Important Note: This was run in google colab pro using A100 GPU.
 
 **Evaluate Model: Sulaiman and Sung**
 
-Team members:
+---
 
-1. Sulaiman Dem-Zerigat
-2. Sung Yi
+Important Note: This was run in google colab pro using A100 GPU.
+
+---
 
 ## Description:
 
