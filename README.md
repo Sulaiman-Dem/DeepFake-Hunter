@@ -6,6 +6,16 @@ Important Note: This was run in google colab pro using A100 GPU.
 
 ---
 
+**Data Preparation: Sulaiman and Sung**
+
+**Inspect and Explore Data (EDA): Sulaiman and Sung**
+
+**Select and Engineer Features (Augmentation and Extraction): Sulaiman and Sung**
+
+**Build and Train Model: Sulaiman and Sung**
+
+**Evaluate Model: Sulaiman and Sung**
+
 Team members:
 
 1. Sulaiman Dem-Zerigat
