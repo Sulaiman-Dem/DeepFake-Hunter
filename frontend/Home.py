@@ -55,7 +55,7 @@ def get_feature(file_path):
 st.header("Deepfake Detector (temp header)")
 
 # Columns
-col1, col2 = st.columns([1,1])
+col1, col2 = st.columns([1,1], gap='medium')
 
 
 # inside of the first column for adding the audio file and displaying it
@@ -85,6 +85,7 @@ with col2:
         y_pred = model.predict(X)
         # Real if y_pred is close to 1, Deepfake if y_pred is close to 0, and unsure if y_pred is close to 0.5
         # Displays prediction
+        print(y_pred)
         if y_pred.round() == 1:
             st.write('Real')
             st.write('Our model is ', round((float(y_pred[0])-0.5)*200, 2), '% sure')
