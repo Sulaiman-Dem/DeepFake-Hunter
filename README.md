@@ -17,7 +17,7 @@ Team members:
 
 ---
 
-Important Note: This was run in Google Colab Pro using A100 GPU.
+Important Note: This was run in Google Colab Pro using A100 GPU/ T4 GPU High-Ram.
 
 ---
 
