@@ -1,4 +1,4 @@
-# Deep-Fake-Audio-Detection
+# DeepFake-Hunter
 
 Team members:
 
@@ -17,7 +17,7 @@ Team members:
 
 ---
 
-Important Note: This was run in google colab pro using A100 GPU.
+Important Note: This was run in Google Colab Pro using A100 GPU.
 
 ---
 
