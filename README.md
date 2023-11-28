@@ -10,8 +10,12 @@ Dev Team:
 2. Sung Yi
    [LinkedIn](https://www.linkedin.com/in/sung-yi-901763192/)
 
+---
+
 Test our AI Model here:
 [App](https://huggingface.co/spaces/UW123/Deepfake_Hunter)
+
+---
 
 **Data Preparation: Sulaiman and Sung**
 
