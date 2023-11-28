@@ -5,7 +5,7 @@
 Dev Team:
 
 1. Sulaiman Dem-Zerigat
-   [LinkedIn](www.linkedin.com/in/sulaiman-dem-zerigat-43379a169/)
+   [LinkedIn](https://www.linkedin.com/in/sulaiman-dem-zerigat-43379a169/)
    [Portfolio](https://sulaiman-dem.github.io/)
 2. Sung Yi
    [LinkedIn](https://www.linkedin.com/in/sung-yi-901763192/)
