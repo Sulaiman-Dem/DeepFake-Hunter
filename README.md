@@ -37,7 +37,7 @@ Important Note: This was run in Google Colab Pro using T4 GPU High-Ram.
 
 The primary objective of our AI model is to distinguish between authentic and fabricated audio, specifically focusing on English language audio. This application is essential for enhancing the integrity of audio content and mitigating potential harms caused by deepfake technology.
 
-## DATASETS USED
+## DATASETS USED:
 
 1. [Common Voice on Mozilla](https://commonvoice.mozilla.org/en/datasets)
    <br />
@@ -71,6 +71,10 @@ The primary objective of our AI model is to distinguish between authentic and fa
 8. [Kaggle](https://www.kaggle.com/)
 9. [Streamlit](https://streamlit.io/)
 10. [Hugging Face](https://huggingface.co/)
+
+## SETUP INSTRUCTIONS:
+
+First download all our files from the github. Then open [Google Colab](https://colab.google) and make a google account if you don't have one already. Click on "Open Colab" then it will ask you to open a notebook. Click upload and individually upload each file you want to open.
 
 ## Future Improvements:
 
