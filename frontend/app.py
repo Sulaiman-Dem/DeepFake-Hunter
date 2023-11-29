@@ -9,39 +9,31 @@ import pandas as pd                                      #To create/manipulate a
 import tempfile #To handle temporary files
 from pydub import AudioSegment # To augment audio
 from pathlib import Path # File management
+from audio_recorder_streamlit import audio_recorder # Voice recorder
 
 
 st.set_page_config(
     page_title="Deepfake Hunter",
 )
-
 # This is used to load the model whenever necessary.
 file_path_model = 'models/model.21-main12345' ### Change link for model
-
 model = load_model(file_path_model)
-
 ################################## Feature Extraction for the Audio ##################################
-
 def mel_frequency_cepstral_coefficients(data, sampling_rate, frame_length = 2048, hop_length = 512, flatten:bool = True):
     mfcc = librosa.feature.mfcc(y = data,sr = sampling_rate)
     return np.squeeze(mfcc.T) if not flatten else np.ravel(mfcc.T)
-
 def spectral_centroid(data, sampling_rate, frame_length = 2048, hop_length = 512):
     scentroid = librosa.feature.spectral_centroid(y = data, sr = sampling_rate, n_fft = frame_length, hop_length = hop_length)
     return np.squeeze(scentroid)
-
 def spectral_bandwidth(data, sampling_rate, frame_length = 2048, hop_length = 512):
     sbandwidth = librosa.feature.spectral_bandwidth(y = data, sr = sampling_rate, n_fft = frame_length, hop_length = hop_length)
     return np.squeeze(sbandwidth)
-
 def spectral_rolloff(data, sampling_rate, frame_length = 2048, hop_length = 512):
     srolloff = librosa.feature.spectral_rolloff(y = data, sr = sampling_rate, n_fft = frame_length, hop_length = hop_length)
     return np.squeeze(srolloff)
-
 def spectral_flux(data, sampling_rate):
     sflux = librosa.onset.onset_strength(y = data, sr = sampling_rate)
     return np.squeeze(sflux)
-
 def feature_extraction(data, sampling_rate, frame_length = 2048, hop_length = 512):
     result = np.array([])
     result = np.hstack((result,
@@ -52,39 +44,26 @@ def feature_extraction(data, sampling_rate, frame_length = 2048, hop_length = 51
                         spectral_flux(data, sampling_rate)
                      ))
     return result
-
 def get_features(file_path, duration = 2.5, offset = 0.6):
     data, sampling_rate = librosa.load(path = file_path, duration = duration, offset = offset)
-
     audio_1 = feature_extraction(data, sampling_rate)
     audio = np.array(audio_1)
-    
     audio_features = audio
-
     return audio_features
-
 ######################################################################################################
-
 # Header
 st.write("This is a model that will be able to detect real or fake audio. This current model only accepts wav & mp3 files. You can upload your own audio files or choose between the preloaded audio files")
 st.header("Deepfake Hunter - Tensorflow Version")
-
 # Columns
 col1, col2 = st.columns([1,1], gap='medium')
-
-
 # inside of the first column for adding the audio file and displaying it
 with col1:
-
     # Allows the uploading of the audio files
     input_audio = st.file_uploader('Audio File', type=['wav', 'mp3'])
-
     # display the link to that page.
     if input_audio is not None:
         st.audio(input_audio)
-
 #Audio 1 - 3 is fake and Audio 4 - 6 is real
-
 def predictfile(audio_path):
     # Gets feature of the audio file
     audios_feat = get_features(audio_path)
@@ -109,26 +88,46 @@ def predictfile(audio_path):
         return f'Real,\nour model is {round((float(y_pred[0])-0.5)*200, 2)}% sure'
     else:
         return f'Deepfake,\nour model is {round((abs(float(y_pred[0])-0.5))*200, 2)}% sure'
-
+    
+    # Preloaded Audio files
 # Define a list of preloaded audio files
-preloaded_audio_files = list(Path('frontend/test/').glob('*.wav'))
-
+preloaded_audio_files = list(Path('C:/Users/winge/Desktop/Coding/CunyTechPrep/GroupProjects/Underfunded_Wizards/TestSpaceDeepfakeHunter/frontend/test/').glob('*.wav'))
 # Convert the list of Paths to a list of strings containing only the file name
 preloaded_audio_files = [Path(path).name for path in preloaded_audio_files]
 # Add a dropdown menu to select preloaded audio
-selected_audio_file = st.selectbox('Select a preloaded audio file', ['Choose an audio preset...'] + preloaded_audio_files)
-
+selected_audio_file = st.selectbox('Select a preloaded audio file', preloaded_audio_files)
 # Then later when you are predicting, you need to use the full path
-full_path_preloaded_audio_files = list(Path('frontend/test/').glob('*.wav'))
-
+full_path_preloaded_audio_files = list(Path('C:/Users/winge/Desktop/Coding/CunyTechPrep/GroupProjects/Underfunded_Wizards/TestSpaceDeepfakeHunter/frontend/test/').glob('*.wav'))
 if selected_audio_file != 'Choose an audio preset...':
     # Get the full path of the selected file
     selected_audio_file_path = next((path for path in full_path_preloaded_audio_files if path.name == selected_audio_file), None)
     if selected_audio_file_path is not None:
         preloaded_audio_result = predictfile(str(selected_audio_file_path))
+else:
+    selected_audio_file_path = None
 
+if selected_audio_file_path is not None:
+    preloaded_audio_result = predictfile(str(selected_audio_file_path))
+
+if selected_audio_file_path != 'Choose an audio preset...':
+    preloaded_audio_result = predictfile(selected_audio_file_path)
+    
+    # Voice Recording
+# Records 3 seconds in any case
+# audio_bytes = audio_recorder(
+#   energy_threshold=(-1.0, 1.0),
+#   pause_threshold=3.0,
+# )
+# if audio_bytes:
+#     st.audio(audio_bytes, format="audio/wav")
+# if selected_audio_file_path is not None:
+#         preloaded_audio_result = predictfile(str(selected_audio_file_path))
+        
+        
 uploaded_audio_result = None
 preloaded_audio_result = None
+voice_recordings_result = None
+
 
 if input_audio is not None:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
@@ -141,17 +140,20 @@ if input_audio is not None:
         temp_audio_file = tempfile.mktemp('.wav')
         audio.export(temp_audio_file, format='wav')
     uploaded_audio_result = predictfile(temp_audio_file)
-
 if selected_audio_file_path != 'Choose an audio preset...':
     preloaded_audio_result = predictfile(selected_audio_file_path)
-
+    
+    
 # Display the results separately
 if uploaded_audio_result is not None:
     st.write('Uploaded audio prediction: ', uploaded_audio_result)
-
 if preloaded_audio_result is not None:
     st.write('Preloaded audio prediction: ', preloaded_audio_result)
-
+if voice_recordings_result is not None:
+    st.write('Voice recording prediction: ', voice_recordings_result)
+    
+    
+st.write('----------------------------------------------------------------')
 # Header
 st.header("Deepfake Hunter - Pytorch Version")
 st.write("Under development")
