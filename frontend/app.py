@@ -9,50 +9,61 @@ import pandas as pd                                      #To create/manipulate a
 
 
 st.set_page_config(
-    page_title="Deepfake Detection",
+    page_title="Deepfake Hunter",
 )
 
 # This is used to load the model whenever necessary.
-file_path_model = 'models\model.13_all_data' ### Change link for model
+file_path_model = 'models/model.21-main12345' ### Change link for model
 
 model = load_model(file_path_model)
 
 ################################## Feature Extraction for the Audio ##################################
 
-fn_list_i = [
- librosa.feature.melspectrogram,
- librosa.feature.spectral_centroid,
- librosa.feature.spectral_bandwidth,
- librosa.feature.chroma_stft,
- feature.spectral_rolloff,
- librosa.feature.mfcc,
- librosa.onset.onset_strength,
-]
+def mel_frequency_cepstral_coefficients(data, sampling_rate, frame_length = 2048, hop_length = 512, flatten:bool = True):
+    mfcc = librosa.feature.mfcc(y = data,sr = sampling_rate)
+    return np.squeeze(mfcc.T) if not flatten else np.ravel(mfcc.T)
 
-fn_list_ii = [
- feature.zero_crossing_rate
-]
-fn_list_iii = [
- librosa.feature.rms
-]
+def spectral_centroid(data, sampling_rate, frame_length = 2048, hop_length = 512):
+    scentroid = librosa.feature.spectral_centroid(y = data, sr = sampling_rate, n_fft = frame_length, hop_length = hop_length)
+    return np.squeeze(scentroid)
 
-def get_feature_vector(y,sr):
-   feat_vect_i = [ np.mean(funct(y=y, sr=sr)) for funct in fn_list_i]
-   feat_vect_ii = [ np.mean(funct(y)) for funct in fn_list_ii]
-   feat_vect_iii = [ np.mean(funct(y=y)) for funct in fn_list_ii]
-   feature_vector = feat_vect_i + feat_vect_ii + feat_vect_iii
-   return feature_vector
+def spectral_bandwidth(data, sampling_rate, frame_length = 2048, hop_length = 512):
+    sbandwidth = librosa.feature.spectral_bandwidth(y = data, sr = sampling_rate, n_fft = frame_length, hop_length = hop_length)
+    return np.squeeze(sbandwidth)
 
-audios_feat = []
-def get_feature(file_path):
-    y, sr = librosa.load(file_path,sr=None)
-    feature_vector = get_feature_vector(y, sr)
-    audios_feat.append(feature_vector)
+def spectral_rolloff(data, sampling_rate, frame_length = 2048, hop_length = 512):
+    srolloff = librosa.feature.spectral_rolloff(y = data, sr = sampling_rate, n_fft = frame_length, hop_length = hop_length)
+    return np.squeeze(srolloff)
+
+def spectral_flux(data, sampling_rate):
+    sflux = librosa.onset.onset_strength(y = data, sr = sampling_rate)
+    return np.squeeze(sflux)
+
+def feature_extraction(data, sampling_rate, frame_length = 2048, hop_length = 512):
+    result = np.array([])
+    result = np.hstack((result,
+                        mel_frequency_cepstral_coefficients(data, sampling_rate, frame_length, hop_length),
+                        spectral_centroid(data, sampling_rate, frame_length, hop_length),
+                        spectral_bandwidth(data, sampling_rate, frame_length, hop_length),
+                        spectral_rolloff(data, sampling_rate, frame_length, hop_length),
+                        spectral_flux(data, sampling_rate)
+                     ))
+    return result
+
+def get_features(file_path, duration = 2.5, offset = 0.6):
+    data, sampling_rate = librosa.load(path = file_path, duration = duration, offset = offset)
+
+    audio_1 = feature_extraction(data, sampling_rate)
+    audio = np.array(audio_1)
+    
+    audio_features = audio
+
+    return audio_features
 
 ######################################################################################################
 
 # Header
-st.header("Deepfake Detector (temp header)")
+st.header("Deepfake Hunter - Tensorflow Version")
 
 # Columns
 col1, col2 = st.columns([1,1], gap='medium')
@@ -72,14 +83,25 @@ with col1:
 with col2:
     def predictfile():
         # Gets feature of the audio file
-        get_feature(input_audio)
-
+        audios_feat = get_features(input_audio)
+        
+        audio_feat_df = pd.DataFrame(audios_feat)
+        
+        if len(audio_feat_df) < 2592:
+            for i in range(2592 - len(audio_feat_df)):
+                audio_feat_df.loc[len(audio_feat_df)] = 0
+                
         # Puts features into a dataframe
-        features_df = pd.DataFrame(audios_feat)
+        features_df = pd.DataFrame(audio_feat_df)
+            
+        full_audio_feature_list = []
+        audio_features_flattened = np.array(features_df).flatten()
+        full_audio_feature_list.append(audio_features_flattened)
+        audio_features = pd.DataFrame(full_audio_feature_list)
 
         # Loads in Standard Scalar used for training the model
-        standard_scaler = joblib.load("models\standard_scaler13_all_data.save")### Change link for scaler
-        X = standard_scaler.transform(features_df)
+        standard_scaler = joblib.load("models/standard_scaler21-main12345.save")### Change link for scaler
+        X = standard_scaler.transform(audio_features)
 
         # Uses the model to predict whether its a Deepfake or not
         y_pred = model.predict(X)
@@ -95,3 +117,8 @@ with col2:
 
     if st.button(label='Predict'):
         predictfile()
+
+
+# Header
+st.header("Deepfake Hunter - Pytorch Version")
+st.write("Under development")
