@@ -60,7 +60,7 @@ def get_features(file_path, duration = 2.5, offset = 0.6):
 
 
 # Header
-st.write("This is a model that will be able to detect real or fake audio. This current model only accepts wav & mp3 files. You can upload your own audio files or choose between the preloaded audio files")
+st.write("This is a model that will be able to detect real or fake audio. This current model only accepts wav & mp3 files. You can upload your own audio files or choose between the preloaded audio files.")
 st.header("Deepfake Hunter - Tensorflow Version")
 
 
