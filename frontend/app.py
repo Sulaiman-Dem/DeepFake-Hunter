@@ -99,13 +99,13 @@ def predictfile(audio_path):
     
     # Preloaded Audio files
 # Define a list of preloaded audio files
-preloaded_audio_files = list(Path('C:/Users/winge/Desktop/Coding/CunyTechPrep/GroupProjects/Underfunded_Wizards/TestSpaceDeepfakeHunter/frontend/test/').glob('*.wav'))
+preloaded_audio_files = list(Path('frontend/test/').glob('*.wav'))
 # Convert the list of Paths to a list of strings containing only the file name
 preloaded_audio_files = [Path(path).name for path in preloaded_audio_files]
 # Add a dropdown menu to select preloaded audio
 selected_audio_file = st.selectbox('Select a preloaded audio file', preloaded_audio_files)
 # Then later when you are predicting, you need to use the full path
-full_path_preloaded_audio_files = list(Path('C:/Users/winge/Desktop/Coding/CunyTechPrep/GroupProjects/Underfunded_Wizards/TestSpaceDeepfakeHunter/frontend/test/').glob('*.wav'))
+full_path_preloaded_audio_files = list(Path('frontend/test/').glob('*.wav'))
 if selected_audio_file != 'Choose an audio preset...':
     # Get the full path of the selected file
     selected_audio_file_path = next((path for path in full_path_preloaded_audio_files if path.name == selected_audio_file), None)
