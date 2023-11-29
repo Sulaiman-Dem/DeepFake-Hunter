@@ -6,6 +6,9 @@ from tensorflow.keras.models import load_model           # To load the model.
 from sklearn.preprocessing import StandardScaler # To perform standardization by centering and scaling.
 import numpy as np                                       # Data wrangling.
 import pandas as pd                                      #To create/manipulate a dataframe
+import tempfile #To handle temporary files
+from pydub import AudioSegment # To augment audio
+from pathlib import Path # File management
 
 
 st.set_page_config(
@@ -63,6 +66,7 @@ def get_features(file_path, duration = 2.5, offset = 0.6):
 ######################################################################################################
 
 # Header
+st.write("This is a model that will be able to detect real or fake audio. This current model only accepts wav & mp3 files. You can upload your own audio files or choose between the preloaded audio files")
 st.header("Deepfake Hunter - Tensorflow Version")
 
 # Columns
@@ -73,51 +77,80 @@ col1, col2 = st.columns([1,1], gap='medium')
 with col1:
 
     # Allows the uploading of the audio files
-    input_audio = st.file_uploader('Audio File', type=['wav'])
+    input_audio = st.file_uploader('Audio File', type=['wav', 'mp3'])
 
     # display the link to that page.
-    st.audio(input_audio)
+    if input_audio is not None:
+        st.audio(input_audio)
 
+#Audio 1 - 3 is fake and Audio 4 - 6 is real
 
-# inside of column 2 for the results of the detection
-with col2:
-    def predictfile():
-        # Gets feature of the audio file
-        audios_feat = get_features(input_audio)
-        
-        audio_feat_df = pd.DataFrame(audios_feat)
-        
-        if len(audio_feat_df) < 2592:
-            for i in range(2592 - len(audio_feat_df)):
-                audio_feat_df.loc[len(audio_feat_df)] = 0
-                
-        # Puts features into a dataframe
-        features_df = pd.DataFrame(audio_feat_df)
-            
-        full_audio_feature_list = []
-        audio_features_flattened = np.array(features_df).flatten()
-        full_audio_feature_list.append(audio_features_flattened)
-        audio_features = pd.DataFrame(full_audio_feature_list)
+def predictfile(audio_path):
+    # Gets feature of the audio file
+    audios_feat = get_features(audio_path)
+    audio_feat_df = pd.DataFrame(audios_feat)
+    if len(audio_feat_df) < 2592:
+        for i in range(2592 - len(audio_feat_df)):
+            audio_feat_df.loc[len(audio_feat_df)] = 0
+    # Puts features into a dataframe
+    features_df = pd.DataFrame(audio_feat_df)
+    full_audio_feature_list = []
+    audio_features_flattened = np.array(features_df).flatten()
+    full_audio_feature_list.append(audio_features_flattened)
+    audio_features = pd.DataFrame(full_audio_feature_list)
+    # Loads in Standard Scalar used for training the model
+    standard_scaler = joblib.load("models/standard_scaler21-main12345.save")### Change link for scaler
+    X = standard_scaler.transform(audio_features)
+    # Uses the model to predict whether its a Deepfake or not
+    y_pred = model.predict(X)
+    # Real if y_pred is close to 1, Deepfake if y_pred is close to 0, and unsure if y_pred is close to 0.5
+    # Returns prediction
+    if y_pred.round() == 1:
+        return f'Real,\nour model is {round((float(y_pred[0])-0.5)*200, 2)}% sure'
+    else:
+        return f'Deepfake,\nour model is {round((abs(float(y_pred[0])-0.5))*200, 2)}% sure'
 
-        # Loads in Standard Scalar used for training the model
-        standard_scaler = joblib.load("models/standard_scaler21-main12345.save")### Change link for scaler
-        X = standard_scaler.transform(audio_features)
+# Define a list of preloaded audio files
+preloaded_audio_files = list(Path('frontend/test/').glob('*.wav'))
 
-        # Uses the model to predict whether its a Deepfake or not
-        y_pred = model.predict(X)
-        # Real if y_pred is close to 1, Deepfake if y_pred is close to 0, and unsure if y_pred is close to 0.5
-        # Displays prediction
-        print(y_pred)
-        if y_pred.round() == 1:
-            st.write('Real')
-            st.write('Our model is ', round((float(y_pred[0])-0.5)*200, 2), '% sure')
-        else:
-            st.write('Deepfake')
-            st.write('Our model is ', round((abs(float(y_pred[0])-0.5))*200, 2), '% sure')
+# Convert the list of Paths to a list of strings containing only the file name
+preloaded_audio_files = [Path(path).name for path in preloaded_audio_files]
+# Add a dropdown menu to select preloaded audio
+selected_audio_file = st.selectbox('Select a preloaded audio file', ['Choose an audio preset...'] + preloaded_audio_files)
 
-    if st.button(label='Predict'):
-        predictfile()
+# Then later when you are predicting, you need to use the full path
+full_path_preloaded_audio_files = list(Path('frontend/test/').glob('*.wav'))
 
+if selected_audio_file != 'Choose an audio preset...':
+    # Get the full path of the selected file
+    selected_audio_file_path = next((path for path in full_path_preloaded_audio_files if path.name == selected_audio_file), None)
+    if selected_audio_file_path is not None:
+        preloaded_audio_result = predictfile(str(selected_audio_file_path))
+
+uploaded_audio_result = None
+preloaded_audio_result = None
+
+if input_audio is not None:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
+        f.write(input_audio.getvalue())
+        temp_audio_file = f.name
+    # if the input file is mp3, convert it to wav
+    if input_audio.type == 'audio/mp3':
+        audio = AudioSegment.from_mp3(temp_audio_file)
+        #save as wav
+        temp_audio_file = tempfile.mktemp('.wav')
+        audio.export(temp_audio_file, format='wav')
+    uploaded_audio_result = predictfile(temp_audio_file)
+
+if selected_audio_file_path != 'Choose an audio preset...':
+    preloaded_audio_result = predictfile(selected_audio_file_path)
+
+# Display the results separately
+if uploaded_audio_result is not None:
+    st.write('Uploaded audio prediction: ', uploaded_audio_result)
+
+if preloaded_audio_result is not None:
+    st.write('Preloaded audio prediction: ', preloaded_audio_result)
 
 # Header
 st.header("Deepfake Hunter - Pytorch Version")

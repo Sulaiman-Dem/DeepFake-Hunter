@@ -76,6 +76,8 @@ The primary objective of our AI model is to distinguish between authentic and fa
 
 First download all our files from the github. Then open [Google Colab](https://colab.google) and make a google account if you don't have one already. Click on "Open Colab" then it will ask you to open a notebook. Click upload and individually upload each file you want to open.
 
+> Note: Be very careful of file pathing because you would have to change the path files in the code to your respected workspace.
+
 ## Future Improvements:
 
 This model was made with [tensorflow sequential API](https://www.tensorflow.org/api_docs/python/tf/keras/Sequential). Our next version will be use [pytorch](https://pytorch.org) instead to have more customization of the model.
