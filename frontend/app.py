@@ -15,9 +15,11 @@ from audio_recorder_streamlit import audio_recorder # Voice recorder
 st.set_page_config(
     page_title="Deepfake Hunter",
 )
+
 # This is used to load the model whenever necessary.
 file_path_model = 'models/model.21-main12345' ### Change link for model
 model = load_model(file_path_model)
+
 ################################## Feature Extraction for the Audio ##################################
 def mel_frequency_cepstral_coefficients(data, sampling_rate, frame_length = 2048, hop_length = 512, flatten:bool = True):
     mfcc = librosa.feature.mfcc(y = data,sr = sampling_rate)
@@ -44,6 +46,7 @@ def feature_extraction(data, sampling_rate, frame_length = 2048, hop_length = 51
                         spectral_flux(data, sampling_rate)
                      ))
     return result
+
 def get_features(file_path, duration = 2.5, offset = 0.6):
     data, sampling_rate = librosa.load(path = file_path, duration = duration, offset = offset)
     audio_1 = feature_extraction(data, sampling_rate)
@@ -51,11 +54,16 @@ def get_features(file_path, duration = 2.5, offset = 0.6):
     audio_features = audio
     return audio_features
 ######################################################################################################
+
+
 # Header
 st.write("This is a model that will be able to detect real or fake audio. This current model only accepts wav & mp3 files. You can upload your own audio files or choose between the preloaded audio files")
 st.header("Deepfake Hunter - Tensorflow Version")
+
+
 # Columns
 col1, col2 = st.columns([1,1], gap='medium')
+
 # inside of the first column for adding the audio file and displaying it
 with col1:
     # Allows the uploading of the audio files
@@ -63,7 +71,7 @@ with col1:
     # display the link to that page.
     if input_audio is not None:
         st.audio(input_audio)
-#Audio 1 - 3 is fake and Audio 4 - 6 is real
+        
 def predictfile(audio_path):
     # Gets feature of the audio file
     audios_feat = get_features(audio_path)
@@ -114,21 +122,16 @@ if selected_audio_file_path != 'Choose an audio preset...':
     
     # Voice Recording
 # Records 3 seconds in any case
-# audio_bytes = audio_recorder(
-#   energy_threshold=(-1.0, 1.0),
-#   pause_threshold=3.0,
-# )
-# if audio_bytes:
-#     st.audio(audio_bytes, format="audio/wav")
-# if selected_audio_file_path is not None:
-#         preloaded_audio_result = predictfile(str(selected_audio_file_path))
-        
-        
-uploaded_audio_result = None
-preloaded_audio_result = None
-voice_recordings_result = None
+audio_bytes = audio_recorder(
+  energy_threshold=(-1.0, 1.0),
+  pause_threshold=3.0,
+)
+if audio_bytes:
+    st.audio(audio_bytes, format="audio/wav")
+if audio_bytes is not None:
+        voice_recordings_result = predictfile(str(selected_audio_file_path))
 
-
+ #Input audio if wav or mp3
 if input_audio is not None:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
         f.write(input_audio.getvalue())
@@ -142,6 +145,10 @@ if input_audio is not None:
     uploaded_audio_result = predictfile(temp_audio_file)
 if selected_audio_file_path != 'Choose an audio preset...':
     preloaded_audio_result = predictfile(selected_audio_file_path)
+    
+uploaded_audio_result = None
+preloaded_audio_result = None
+voice_recordings_result = None
     
     
 # Display the results separately
