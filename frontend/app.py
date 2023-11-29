@@ -11,6 +11,9 @@ from pydub import AudioSegment # To augment audio
 from pathlib import Path # File management
 from audio_recorder_streamlit import audio_recorder # Voice recorder
 
+uploaded_audio_result = None
+preloaded_audio_result = None
+voice_recordings_result = None
 
 st.set_page_config(
     page_title="Deepfake Hunter",
@@ -145,10 +148,6 @@ if input_audio is not None:
     uploaded_audio_result = predictfile(temp_audio_file)
 if selected_audio_file_path != 'Choose an audio preset...':
     preloaded_audio_result = predictfile(selected_audio_file_path)
-    
-uploaded_audio_result = None
-preloaded_audio_result = None
-voice_recordings_result = None
     
     
 # Display the results separately
