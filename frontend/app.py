@@ -10,6 +10,7 @@ import tempfile #To handle temporary files
 from pydub import AudioSegment # To augment audio
 from pathlib import Path # File management
 from audio_recorder_streamlit import audio_recorder # Voice recorder
+from st_audiorec import st_audiorec  # Voice recorder
 
 uploaded_audio_result = None
 preloaded_audio_result = None
@@ -102,13 +103,13 @@ def predictfile(audio_path):
     
     # Preloaded Audio files
 # Define a list of preloaded audio files
-preloaded_audio_files = list(Path('frontend/test/').glob('*.wav'))
+preloaded_audio_files = list(Path('C:/Users/winge/Desktop/Coding/CunyTechPrep/GroupProjects/Underfunded_Wizards/TestSpaceDeepfakeHunter/frontend/test/').glob('*.wav'))
 # Convert the list of Paths to a list of strings containing only the file name
 preloaded_audio_files = [Path(path).name for path in preloaded_audio_files]
 # Add a dropdown menu to select preloaded audio
 selected_audio_file = st.selectbox('Select a preloaded audio file', preloaded_audio_files)
 # Then later when you are predicting, you need to use the full path
-full_path_preloaded_audio_files = list(Path('frontend/test/').glob('*.wav'))
+full_path_preloaded_audio_files = list(Path('C:/Users/winge/Desktop/Coding/CunyTechPrep/GroupProjects/Underfunded_Wizards/TestSpaceDeepfakeHunter/frontend/test/').glob('*.wav'))
 if selected_audio_file != 'Choose an audio preset...':
     # Get the full path of the selected file
     selected_audio_file_path = next((path for path in full_path_preloaded_audio_files if path.name == selected_audio_file), None)
@@ -124,17 +125,23 @@ if selected_audio_file_path != 'Choose an audio preset...':
     preloaded_audio_result = predictfile(selected_audio_file_path)
     
     # Voice Recording
-# Records 3 seconds in any case
+# Records 8 seconds in any case
 # st.write('Here you can record yourself and test your real voice to the model')
 # audio_bytes = audio_recorder(
 #   energy_threshold=(-1.0, 1.0),
-#   pause_threshold=3.0,
+#   pause_threshold=8.0,
 # )
 
 # if audio_bytes:
 #     st.audio(audio_bytes, format="audio/wav")
 # if audio_bytes is not None:
-#         voice_recordings_result = predictfile(str(audio_bytes))
+#         voice_recordings_result = predictfile(str(audio_bytes)) 
+
+# wav_audio_data = st_audiorec()
+
+# if wav_audio_data is not None:
+#     wave_audio_data = st.audio(wav_audio_data, format='audio/wav')
+#     voice_recordings_result = predictfile(wav_audio_data)
 
  #Input audio if wav or mp3
 if input_audio is not None:
