@@ -83,7 +83,7 @@ First download all our files from the github. Then open [Google Colab](https://c
 
 This model was made with [tensorflow sequential API](https://www.tensorflow.org/api_docs/python/tf/keras/Sequential). Our next version will be use [pytorch](https://pytorch.org) instead to have more customization of the model.
 
-## Created BY
+## Created By
 
 <div align="center">
     <!-- <h1  align="center" >Deepfake Hunter</h1> -->
