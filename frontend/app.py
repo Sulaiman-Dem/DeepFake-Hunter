@@ -12,6 +12,7 @@ from pathlib import Path # File management
 
 uploaded_audio_result = None
 preloaded_audio_result = None
+voice_recordings_result = None
 
 st.set_page_config(
     page_title="Deepfake Hunter",
@@ -56,13 +57,16 @@ def get_features(file_path, duration = 2.5, offset = 0.6):
     return audio_features
 ######################################################################################################
 
-
+st.image('Deepfake_Hunter.png')
+    
 # Header
 st.write("This is a model that will be able to detect real or fake audio. This current model only accepts wav & mp3 files. You can upload your own audio files or choose between the preloaded audio files.")
-st.header("Deepfake Hunter - Tensorflow Version")
+st.header("Tensorflow Version")
 
 # Columns
 col1, col2 = st.columns([1,1], gap='medium')
+
+
 
 # inside of the first column for adding the audio file and displaying it
 with col1:
@@ -110,8 +114,6 @@ if input_audio is not None:
         temp_audio_file = tempfile.mktemp('.wav')
         audio.export(temp_audio_file, format='wav')
     uploaded_audio_result = predictfile(temp_audio_file)
-    
-# Display the results 
 if uploaded_audio_result is not None:
     st.write('Uploaded audio prediction: ', uploaded_audio_result)
     
@@ -134,8 +136,12 @@ else:
 
 if selected_audio_file_path is not None:
     preloaded_audio_result = predictfile(str(selected_audio_file_path))
+
+
+
     
-# Display the results 
+    
+# Display the results separately
 
 if preloaded_audio_result is not None:
     st.write('Preloaded audio prediction: ', preloaded_audio_result)
@@ -143,5 +149,8 @@ if preloaded_audio_result is not None:
     
 st.write('----------------------------------------------------------------')
 # Header
-st.header("Deepfake Hunter - Pytorch Version")
+st.header("Pytorch Version")
 st.write("Under development")
+
+st.write('Created By:')
+st.image('Underfunded_Wizards.png')
