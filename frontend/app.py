@@ -65,8 +65,6 @@ st.header("Deepfake Hunter - Tensorflow Version")
 # Columns
 col1, col2 = st.columns([1,1], gap='medium')
 
-
-
 # inside of the first column for adding the audio file and displaying it
 with col1:
     # Allows the uploading of the audio files
@@ -113,6 +111,8 @@ if input_audio is not None:
         temp_audio_file = tempfile.mktemp('.wav')
         audio.export(temp_audio_file, format='wav')
     uploaded_audio_result = predictfile(temp_audio_file)
+    
+# Display the results 
 if uploaded_audio_result is not None:
     st.write('Uploaded audio prediction: ', uploaded_audio_result)
     
@@ -136,7 +136,7 @@ else:
 if selected_audio_file_path is not None:
     preloaded_audio_result = predictfile(str(selected_audio_file_path))
     
-# Display the results separately
+# Display the results 
 
 if preloaded_audio_result is not None:
     st.write('Preloaded audio prediction: ', preloaded_audio_result)
@@ -146,5 +146,3 @@ st.write('----------------------------------------------------------------')
 # Header
 st.header("Deepfake Hunter - Pytorch Version")
 st.write("Under development")
-
-#st.image('Deepfake_Hunter.png')
