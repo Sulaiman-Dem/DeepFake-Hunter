@@ -9,8 +9,6 @@ import pandas as pd                                      #To create/manipulate a
 import tempfile #To handle temporary files
 from pydub import AudioSegment # To augment audio
 from pathlib import Path # File management
-from audio_recorder_streamlit import audio_recorder # Voice recorder
-from st_audiorec import st_audiorec  # Voice recorder
 
 uploaded_audio_result = None
 preloaded_audio_result = None
@@ -64,9 +62,10 @@ def get_features(file_path, duration = 2.5, offset = 0.6):
 st.write("This is a model that will be able to detect real or fake audio. This current model only accepts wav & mp3 files. You can upload your own audio files or choose between the preloaded audio files.")
 st.header("Deepfake Hunter - Tensorflow Version")
 
-
 # Columns
 col1, col2 = st.columns([1,1], gap='medium')
+
+
 
 # inside of the first column for adding the audio file and displaying it
 with col1:
@@ -75,7 +74,8 @@ with col1:
     # display the link to that page.
     if input_audio is not None:
         st.audio(input_audio)
-        
+    
+
 def predictfile(audio_path):
     # Gets feature of the audio file
     audios_feat = get_features(audio_path)
@@ -101,49 +101,7 @@ def predictfile(audio_path):
     else:
         return f'Deepfake,\nour model is {round((abs(float(y_pred[0])-0.5))*200, 2)}% sure'
     
-    # Preloaded Audio files
-# Define a list of preloaded audio files
-preloaded_audio_files = list(Path('C:/Users/winge/Desktop/Coding/CunyTechPrep/GroupProjects/Underfunded_Wizards/TestSpaceDeepfakeHunter/frontend/test/').glob('*.wav'))
-# Convert the list of Paths to a list of strings containing only the file name
-preloaded_audio_files = [Path(path).name for path in preloaded_audio_files]
-# Add a dropdown menu to select preloaded audio
-selected_audio_file = st.selectbox('Select a preloaded audio file', preloaded_audio_files)
-# Then later when you are predicting, you need to use the full path
-full_path_preloaded_audio_files = list(Path('C:/Users/winge/Desktop/Coding/CunyTechPrep/GroupProjects/Underfunded_Wizards/TestSpaceDeepfakeHunter/frontend/test/').glob('*.wav'))
-if selected_audio_file != 'Choose an audio preset...':
-    # Get the full path of the selected file
-    selected_audio_file_path = next((path for path in full_path_preloaded_audio_files if path.name == selected_audio_file), None)
-    if selected_audio_file_path is not None:
-        preloaded_audio_result = predictfile(str(selected_audio_file_path))
-else:
-    selected_audio_file_path = None
-
-if selected_audio_file_path is not None:
-    preloaded_audio_result = predictfile(str(selected_audio_file_path))
-
-if selected_audio_file_path != 'Choose an audio preset...':
-    preloaded_audio_result = predictfile(selected_audio_file_path)
-    
-    # Voice Recording
-# Records 8 seconds in any case
-# st.write('Here you can record yourself and test your real voice to the model')
-# audio_bytes = audio_recorder(
-#   energy_threshold=(-1.0, 1.0),
-#   pause_threshold=8.0,
-# )
-
-# if audio_bytes:
-#     st.audio(audio_bytes, format="audio/wav")
-# if audio_bytes is not None:
-#         voice_recordings_result = predictfile(str(audio_bytes)) 
-
-# wav_audio_data = st_audiorec()
-
-# if wav_audio_data is not None:
-#     wave_audio_data = st.audio(wav_audio_data, format='audio/wav')
-#     voice_recordings_result = predictfile(wav_audio_data)
-
- #Input audio if wav or mp3
+#Input audio if wav or mp3
 if input_audio is not None:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
         f.write(input_audio.getvalue())
@@ -155,20 +113,38 @@ if input_audio is not None:
         temp_audio_file = tempfile.mktemp('.wav')
         audio.export(temp_audio_file, format='wav')
     uploaded_audio_result = predictfile(temp_audio_file)
-if selected_audio_file_path != 'Choose an audio preset...':
-    preloaded_audio_result = predictfile(selected_audio_file_path)
-    
-    
-# Display the results separately
 if uploaded_audio_result is not None:
     st.write('Uploaded audio prediction: ', uploaded_audio_result)
+    
+# Define a list of preloaded audio files
+preloaded_audio_files = list(Path('test/').glob('*.wav'))
+# Convert the list of Paths to a list of strings containing only the file name
+preloaded_audio_files = [Path(path).name for path in preloaded_audio_files]
+# Add a dropdown menu to select preloaded audio
+selected_audio_file = st.selectbox('Select a preloaded audio file', preloaded_audio_files)
+# Then later when you are predicting, you need to use the full path
+full_path_preloaded_audio_files = list(Path('test/').glob('*.wav'))
+if selected_audio_file != 'Choose an audio preset...':
+    # Get the full path of the selected file
+    selected_audio_file_path = next((path for path in full_path_preloaded_audio_files if path.name == selected_audio_file), None)
+    if selected_audio_file_path is not None:
+        st.audio(str(selected_audio_file_path))
+        preloaded_audio_result = predictfile(str(selected_audio_file_path))
+else:
+    selected_audio_file_path = None
+
+if selected_audio_file_path is not None:
+    preloaded_audio_result = predictfile(str(selected_audio_file_path))
+    
+# Display the results separately
+
 if preloaded_audio_result is not None:
     st.write('Preloaded audio prediction: ', preloaded_audio_result)
-if voice_recordings_result is not None:
-    st.write('Voice recording prediction: ', voice_recordings_result)
-    
+
     
 st.write('----------------------------------------------------------------')
 # Header
 st.header("Deepfake Hunter - Pytorch Version")
 st.write("Under development")
+
+#st.image('Deepfake_Hunter.png')
