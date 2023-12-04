@@ -12,7 +12,6 @@ from pathlib import Path # File management
 
 uploaded_audio_result = None
 preloaded_audio_result = None
-voice_recordings_result = None
 
 st.set_page_config(
     page_title="Deepfake Hunter",
