@@ -86,6 +86,5 @@ This model was made with [tensorflow sequential API](https://www.tensorflow.org/
 ## Created By:
 
 <div align="center">
-    <!-- <h1  align="center" >Deepfake Hunter</h1> -->
     <img src="Image\Underfunded_Wizards.png" alt="Deepfake-Hunter-Logo" width="500" height="">
 </div>
