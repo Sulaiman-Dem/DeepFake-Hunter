@@ -1,5 +1,6 @@
-<div>
-    <h1  align="center" >Deepfake Hunter</h1>
+<div style="text-align:center">
+    <!-- <h1  align="center" >Deepfake Hunter</h1> -->
+    <img src="Image\Deepfake_Hunter.png" alt="Deepfake-Hunter-Logo" width="500" height="">
 </div>
 
 Dev Team:
