@@ -84,7 +84,7 @@ This model was made with [tensorflow sequential API](https://www.tensorflow.org/
 
 ## Special Mentions:
 
-Thanks you [Georgios Ioannou](https://github.com/georgiosioannoucoder) for all your help and guidance. 
+Thank you [Georgios Ioannou](https://github.com/georgiosioannoucoder) for all your help and guidance which made creating this possible. 
 
 ## Created By:
 
