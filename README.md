@@ -82,6 +82,10 @@ First download all our files from the github. Then open [Google Colab](https://c
 
 This model was made with [tensorflow sequential API](https://www.tensorflow.org/api_docs/python/tf/keras/Sequential). Our next version will be use [pytorch](https://pytorch.org) instead to have more customization of the model.
 
+## Special Mentions:
+
+Thanks you [Georgios Ioannou](https://github.com/georgiosioannoucoder) for all your help and guidance. 
+
 ## Created By:
 
 <div align="center">
