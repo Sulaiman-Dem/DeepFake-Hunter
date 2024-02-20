@@ -12,11 +12,6 @@ Dev Team:
 
 ---
 
-Test our AI Model here:
-[App](https://huggingface.co/spaces/UW123/Deepfake_Hunter)
-
----
-
 **Data Preparation: Sulaiman and Sung**
 
 **Inspect and Explore Data (EDA): Sulaiman and Sung**
@@ -84,7 +79,7 @@ This model was made with [tensorflow sequential API](https://www.tensorflow.org/
 
 ## Special Mentions:
 
-Thank you [Georgios Ioannou](https://github.com/georgiosioannoucoder) for all your help and guidance which made creating this possible. 
+Thank you [Georgios Ioannou](https://github.com/georgiosioannoucoder) for all your help and guidance which made creating this possible.
 
 ## Created By:
 
